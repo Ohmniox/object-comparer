@@ -64,23 +64,18 @@ namespace ObjectComparer.CustomComparers
                     continue;
                 }
 
-                if (array1[i] == null)
+                if ((array1[i] == null && array2[i] != null) || (array1[i] != null  && array2[i] == null))
+                {
+                    return false;
+                }
+                var array1ItemType = array1[i].GetType();
+                if (array1ItemType != array2[i].GetType())
                 {
                     return false;
                 }
 
-                if (array2[i] == null)
-                {
-                    return false;
-                }
-
-                if (array1[i].GetType() != array2[i].GetType())
-                {
-                    return false;
-                }
-
-                var comparer = Factory.GetComparer(array1[i].GetType());
-                if (!comparer.CustomCompare(array1[i].GetType(), array1[i], array2[i]))
+                var comparer = Factory.GetComparer(array1ItemType);
+                if (!comparer.CustomCompare(array1ItemType, array1[i], array2[i]))
                 {
                     return false;
                 }
